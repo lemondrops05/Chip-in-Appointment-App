@@ -43,6 +43,14 @@ def setup_database():
         cursor.execute("INSERT INTO admins (admin_id, password) VALUES (?, ?)",
             ("admin1", "adminpass1")
         )
+    
+    cursor.execute("SELECT COUNT(*) FROM services")
+    if cursor.fetchone()[0] == 0:
+        cursor.executemany("INSERT INTO services (name) VALUES (?)", [
+            ("Gel-x",),
+            ("Acrylic",),
+            ("BIAB",)
+        ])
 
     # Commit changes and close connection
     conn.commit()
@@ -61,3 +69,4 @@ def add_user(username, password):
 if __name__ == "__main__":
     setup_database()
     print("Database setup complete.")
+
