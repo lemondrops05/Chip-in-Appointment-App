@@ -29,6 +29,48 @@ def login():
             flash('Email does not exist.', category='error')
     return render_template("login.html", user=current_user)
 
+@auth.route('/staff-login', methods=['GET', 'POST'])
+def staff_login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        #check if user exists
+        user = User.query.filter_by(email=email).first()
+
+        #if user exists check password is correct. compares password entered with hashed password in db.
+        if user:  
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True) #remember true means user will stay logged in even after closing the browser
+                return redirect(url_for('views.home'))#redirect to home page after logging in
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist.', category='error')
+    return render_template("staff_login.html", user=current_user)
+
+@auth.route('/admin-login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        #check if user exists
+        user = User.query.filter_by(email=email).first()
+
+        #if user exists check password is correct. compares password entered with hashed password in db.
+        if user:  
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True) #remember true means user will stay logged in even after closing the browser
+                return redirect(url_for('views.home'))#redirect to home page after logging in
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist.', category='error')
+    return render_template("admin_login.html", user=current_user)
+
 @auth.route('/logout') #decorator
 @login_required #only logged in users can access this route. not necessary but good practice
 def logout():
@@ -58,7 +100,7 @@ def sign_up():
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(password1, method='pbkdf2:sha256')) #pbkdf2:sha256 is a hashing algorithm you can pick another if you like
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True) #log in the user right after signing up
+            login_user(new_user, remember=True) #log in the user right after signing up
             flash('Account created!', category='success')  # Add user to database
             return redirect(url_for('views.home'))#redirect to home page after signing up
 

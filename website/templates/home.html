@@ -1,21 +1,12 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}
 {% block content %}
-<h1 align="center">Notes</h1>
-<ul class="list-group-flush" id="notes">
-    {% for note in user.notes %}
-    <li class="list-group-item">
-        {{ note.data }}
-        <button type="button" class="close" onClick="deleteNote('{{ note.id }}')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </li>
-    {% endfor %}
-</ul>
-<form method="POST">
-    <textarea name="note" id="note" class="form-control"></textarea>
-    <br/>
-    <div align="center">
-        <button type="submit" class="btn btn-primary">Add Note</button>
-    </div>
-</form>
+<h1 align="center">Welcome!</h1>
+<p align="center">{{ greeting }}, {{ current_user.first_name }}</p>
+<div align="center">
+    <h2>Book a Nail Appointment</h2>
+    <!-- Calendly inline widget begin -->
+    <div class="calendly-inline-widget" data-url="https://calendly.com/nailology_windsor" style="min-width:320px;height:700px;"></div>
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Calendly inline widget end -->
+</div>
 {% endblock %}
