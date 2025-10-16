@@ -9,3 +9,14 @@ function deleteNote(noteId){
         window.location.href = "/";
     });
 }
+
+function deleteAppointment(appointmentId) {
+    fetch(`/delete_appointment/${appointmentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((_res) => {
+        window.location.reload();
+    });
+}

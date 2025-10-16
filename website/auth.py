@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
-from . import db
 from werkzeug.security import generate_password_hash, check_password_hash #hashing is for storing passwords not in plain text for security
 from flask_login import login_user, login_required, logout_user, current_user
+from .models import User, AUser
+from . import db
 
 
 auth = Blueprint('auth', __name__)
@@ -50,32 +50,33 @@ def staff_login():
             flash('Email does not exist.', category='error')
     return render_template("staff_login.html", user=current_user)
 
-@auth.route('/admin-login', methods=['GET', 'POST'])
+@auth.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        
-        #check if user exists
-        user = User.query.filter_by(email=email).first()
-
-        #if user exists check password is correct. compares password entered with hashed password in db.
-        if user:  
-            if check_password_hash(user.password, password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True) #remember true means user will stay logged in even after closing the browser
-                return redirect(url_for('views.home'))#redirect to home page after logging in
-            else:
-                flash('Incorrect password, try again.', category='error')
+        admin = AUser.query.filter_by(email=email).first()
+        if admin and check_password_hash(admin.password, password):
+            login_user(admin)
+            flash('Admin logged in successfully!', category='success')
+            return render_template('admin_dash.html')  # <-- Show admin dashboard
         else:
-            flash('Email does not exist.', category='error')
-    return render_template("admin_login.html", user=current_user)
+            flash('Invalid admin credentials.', category='error')
+    return render_template('admin_login.html')
 
 @auth.route('/logout') #decorator
 @login_required #only logged in users can access this route. not necessary but good practice
 def logout():
     logout_user()#logs out the user
     return redirect(url_for('auth.login'))
+
+@auth.route('/admin/logout')
+@login_required
+def admin_logout():
+    logout_user()
+    flash('Logged out.', 'success')
+    return redirect(url_for('auth.admin_login'))
+
 @auth.route('/sign-up', methods=['GET', 'POST']) #decorator
 def sign_up():
     if request.method == 'POST':

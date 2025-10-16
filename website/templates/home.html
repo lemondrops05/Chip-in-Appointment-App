@@ -9,4 +9,21 @@
     <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
     <!-- Calendly inline widget end -->
 </div>
+<div>
+    <h3>Book an Appointment</h3>
+    <hr>
+    <br>
+    <ul class="list-group">
+        {% for service in services %}
+            <li class="list-group-item">
+                {{ service.name }} - ${{ service.price }}
+                <a href="{{ url_for('views.a_book', service_id=service.id) }}" class="btn btn-primary" style="margin-left:10px;">
+                    Book Now
+                </a>
+            </li>
+        {% else %}
+            <li class="list-group-item">No services available.</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

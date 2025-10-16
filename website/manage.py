@@ -1,13 +1,19 @@
-from website import db
-from website.models import User, SUser, AUser, Note
+from website import create_app, db
+from werkzeug.security import generate_password_hash
+from website.models import AUser
 
-def clear_tables():
-    db.session.query(Note).delete()
-    db.session.query(User).delete()
-    db.session.query(SUser).delete()
-    db.session.query(AUser).delete()
+def create_admin():
+    admin = AUser(
+        email="admin@example.com",
+        first_name="Admin",
+        password=generate_password_hash("adminpassword", method='pbkdf2:sha256'),
+        # is_admin=True  # Make sure AUser has this field if needed
+    )
+    db.session.add(admin)
     db.session.commit()
-    print("All tables cleared.")
+    print("Admin user created.")
 
 if __name__ == "__main__":
-    clear_tables()
+    app = create_app()
+    with app.app_context():
+        create_admin()

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}My Appointments{% endblock %}
+{% block content %}
+<h2>Upcoming Appointments</h2>
+<ul>
+    {% for app in upcoming %}
+        <li>
+            {{ app.start_time.strftime('%Y-%m-%d %I:%M %p') }} -
+            {{ app.service.name }} ({{ app.status }})
+            <button onclick="deleteAppointment({{ app.id }})" class="btn btn-danger btn-sm">Delete</button>
+        </li>
+    {% else %}
+        <li>No upcoming appointments.</li>
+    {% endfor %}
+</ul>
+
+<h2>Past Appointments</h2>
+<ul>
+    {% for app in past %}
+        <li>
+            {{ app.start_time.strftime('%Y-%m-%d %I:%M %p') }} -
+            {{ app.service.name }} ({{ app.status }})
+        </li>
+    {% else %}
+        <li>No past appointments.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

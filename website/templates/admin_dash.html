@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h1>Admin Dashboard</h1>
+<h2>Existing Services</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Duration (mins)</th>
+            <th>Price ($)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td>{{ service.description }}</td>
+                <td>{{ service.duration }}</td>
+                <td>{{ service.price }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">No services available.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h2>Add a New Service</h2>
+<form method="POST">
+    <label for="name">Service Name:</label>
+    <input type="text" name="name" required><br>
+    <label for="description">Description:</label>
+    <input type="text" name="description"><br>
+    <label for="duration">Duration (minutes):</label>
+    <input type="number" name="duration" value="240"><br>
+    <label for="price">Price:</label>
+    <input type="number" step="0.01" name="price"><br>
+    <button type="submit" class="btn btn-success">Add Service</button>
+</form>
+{% endblock %}

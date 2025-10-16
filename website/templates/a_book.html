@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}
+{% block content %}
+<h1 align="center">Book Acrylic Manicure</h1>
+<form method="POST" action="{{ url_for('views.book_appointment') }}">
+    <div align="center">
+        <label for="appointment-date">Choose a date:</label>
+        <input type="date" id="appointment-date" name="appointment_date" required>
+        <div align="center">
+            <h4>Pick an appointment time</h4>
+            <ul style="list-style-type:none;">
+                <li>
+                    <input type="radio" id="time1" name="appointment_time" value="09:00 AM" required>
+                    <label for="time1">09:00 AM</label>
+                </li>
+                <li>
+                    <input type="radio" id="time2" name="appointment_time" value="01:00 PM">
+                    <label for="time2">01:00 PM</label>
+                </li>
+                <li>
+                    <input type="radio" id="time3" name="appointment_time" value="05:00 PM">
+                    <label for="time3">05:00 PM</label>
+                </li>
+            </ul>
+            <button type="submit" class="btn btn-primary">Book Appointment</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
